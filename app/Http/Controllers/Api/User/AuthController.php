@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class AuthController extends Controller
          try{
 
             $rules=[
-                "email"=>"required|exists:admins,email",
+                "email"=>"required|exists:users,email",
                 "password"=>"required"
              ];
      
@@ -30,16 +30,16 @@ class AuthController extends Controller
             }
 
             $credintial=$request->only(['email','password']);
-            $token=Auth::guard('admin-api')->attempt($credintial);
+            $token=Auth::guard('user-api')->attempt($credintial);
             
-            if(!$token){
-                return $this->returnError("","this login is incorrect");
-            }
+            // if(!$token){
+            //     return $this->returnError("","this login is incorrect");
+            // }
 
             // return $this->returnData("token",$token); OR
-            $admin=Auth::guard('admin-api')->user();
-            $admin->token=$token;
-            return $this->returnData("admin",$admin);
+            $user=Auth::guard('user-api')->user();
+            $user->token=$token;
+            return $this->returnData("user",$user);
 
         }catch(Exception $e){
             return $this->returnError($e->getCode(),$e->getMessage());
